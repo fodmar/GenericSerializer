@@ -9,7 +9,7 @@ namespace GenericSerializer
         public static IDictionary<string, PropertyInfo> GetProperties<T>()
         {
             return typeof(T)
-                .GetProperties(BindingFlags.Static)
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(p => p.Name);
         }
     }

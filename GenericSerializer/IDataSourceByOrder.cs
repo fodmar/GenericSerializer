@@ -2,6 +2,6 @@
 {
     public interface IDataSourceByOrder
     {
-        string this[int index] { get; }
+        object this[int index] { get; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IDataSourceByKey
     {
-        string this[string key] { get; }
+        object this[string key] { get; }
     }
 }
