@@ -1,11 +1,11 @@
-using GenericSerializer;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Xunit;
 
 namespace GenericSerializerTests
 {
-    public class WithPropertiesOnly : TestBase<WithPropertiesOnly.Object>
+    public class WithPropertiesAndGetter : TestBase<WithPropertiesAndGetter.Object>
     {
         private const string Prop0 = "abc";
         private const bool Prop1 = true;
@@ -16,10 +16,11 @@ namespace GenericSerializerTests
             public string Prop0 { get; set; }
             public bool Prop1 { get; set; }
             public int Prop2 { get; set; }
+            public string Getter => Prop0;
         }
 
-        [Fact(DisplayName = "Object with properties only")]
-        public void TestWithPropertiesOnly() => this.Test();
+        [Fact(DisplayName = "Object with properties and getter")]
+        public void TestWithPropertiesAndGetter() => this.Test();
 
         protected override Dictionary<string, object> PrepareData()
         {
