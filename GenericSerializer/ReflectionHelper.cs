@@ -6,7 +6,7 @@ namespace GenericSerializer
 {
     public static class ReflectionHelper
     {
-        public static IDictionary<string, PropertyInfo> GetGetters<T>()
+        public static IDictionary<string, PropertyInfo> GetSetters<T>()
         {
             return typeof(T)
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)

@@ -10,7 +10,7 @@ namespace GenericSerializer
         {
             T obj = Activator.CreateInstance<T>();
 
-            IDictionary<string, PropertyInfo> properties = ReflectionHelper.GetGetters<T>();
+            IDictionary<string, PropertyInfo> properties = ReflectionHelper.GetSetters<T>();
 
             foreach (KeyValuePair<string, PropertyInfo> property in properties)
             {
