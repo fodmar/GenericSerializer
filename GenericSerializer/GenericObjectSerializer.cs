@@ -11,7 +11,7 @@ namespace GenericSerializer
         {
             Type type = typeof(T);
 
-            IOrderedEnumerable<ConstructorInfo> constructors = ReflectionHelper.GetConstructorsByParameterCount<T>();
+            IOrderedEnumerable<ConstructorInfo> constructors = type.GetConstructorsByParameterCount();
             Dictionary<string, object> readFromDataSource = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
             ConstructorInfo pickedConstructor = null;
@@ -30,7 +30,7 @@ namespace GenericSerializer
 
             T obj = (T)pickedConstructor.Invoke(parameters);
 
-            IDictionary<string, PropertyInfo> properties = ReflectionHelper.GetSetters<T>();
+            IDictionary<string, PropertyInfo> properties = type.GetSetters();
 
             foreach (KeyValuePair<string, PropertyInfo> property in properties)
             {
