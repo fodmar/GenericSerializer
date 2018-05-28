@@ -2,6 +2,6 @@
 {
     public interface IDataSourceByKey
     {
-        object this[string key] { get; }
+        (bool, object) TryGetValueCaseInsensitive(string key);
     }
 }

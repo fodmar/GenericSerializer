@@ -13,5 +13,12 @@ namespace GenericSerializer
                 .Where(p => p.CanWrite)
                 .ToDictionary(p => p.Name);
         }
+
+        public static IOrderedEnumerable<ConstructorInfo> GetConstructorsByParameterCount<T>()
+        {
+            return typeof(T)
+                .GetConstructors()
+                .OrderByDescending(c => c.GetParameters().Length);
+        }
     }
 }
