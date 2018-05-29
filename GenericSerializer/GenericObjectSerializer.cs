@@ -40,7 +40,7 @@ namespace GenericSerializer
 
         public IDataSourceByKey Serialize<T>(T obj)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
