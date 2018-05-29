@@ -7,7 +7,7 @@ namespace GenericSerializer
 {
     class ConstructorSearcher
     {
-        public (ConstructorInfo, object[]) GetConstructorWithMostParametersThatCanSatisfy(Type type, IDataSourceByKey dataSourceByKey, Dictionary<string, object> dataSourceCache)
+        public (ConstructorInfo, object[]) GetConstructorWithMostParametersThatCanSatisfy(Type type, IDataSourceByKey dataSourceByKey)
         {
             IOrderedEnumerable<ConstructorInfo> constructors = type.GetConstructorsByParameterCount();
 
@@ -16,7 +16,7 @@ namespace GenericSerializer
 
             foreach (ConstructorInfo constructor in constructors)
             {
-                parameters = GetParametersValues(constructor, dataSourceByKey, dataSourceCache);
+                parameters = GetParametersValues(constructor, dataSourceByKey);
 
                 if (parameters != null)
                 {
@@ -28,7 +28,7 @@ namespace GenericSerializer
             return (pickedConstructor, parameters);
         }
 
-        public object[] GetParametersValues(ConstructorInfo constructor, IDataSourceByKey dataSourceByKey, Dictionary<string, object> dataSourceCache)
+        public object[] GetParametersValues(ConstructorInfo constructor, IDataSourceByKey dataSourceByKey)
         {
             ParameterInfo[] parameters = constructor.GetParameters();
             object[] parameterValues = new object[parameters.Length];
@@ -37,18 +37,11 @@ namespace GenericSerializer
             {
                 ParameterInfo parameterInfo = parameters[i];
 
-                if (dataSourceCache.TryGetValue(parameterInfo.Name, out object value))
-                {
-                    parameterValues[i] = value;
-                    continue;
-                }
-
                 (bool exisits, object dataSourceValue) = dataSourceByKey.TryGetValueCaseInsensitive(parameterInfo.Name);
 
                 if (exisits)
                 {
                     parameterValues[i] = dataSourceValue;
-                    dataSourceCache.Add(parameterInfo.Name, dataSourceValue);
                     continue;
                 }
 

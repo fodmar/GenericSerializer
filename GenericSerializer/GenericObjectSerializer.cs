@@ -17,9 +17,9 @@ namespace GenericSerializer
         public T Deserialize<T>(IDataSourceByKey dataSourceByKey)
         {
             Type type = typeof(T);
-            Dictionary<string, object> dataSourceCache = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            DataSourceByKeyWraper dataSourceByKeyWrapper = new DataSourceByKeyWraper(dataSourceByKey);
 
-            (ConstructorInfo pickedConstructor, object[] parameters) = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, dataSourceByKey, dataSourceCache);
+            (ConstructorInfo pickedConstructor, object[] parameters) = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, dataSourceByKeyWrapper);
 
             T obj = (T)pickedConstructor.Invoke(parameters);
 
@@ -27,13 +27,7 @@ namespace GenericSerializer
 
             foreach (KeyValuePair<string, PropertyInfo> property in properties)
             {
-                if (dataSourceCache.TryGetValue(property.Key, out object dataSourceValue))
-                {
-                    property.Value.SetValue(obj, dataSourceValue);
-                    continue;
-                }
-
-                (bool hasKey, object value) = dataSourceByKey.TryGetValueCaseInsensitive(property.Key);
+                (bool hasKey, object value) = dataSourceByKeyWrapper.TryGetValueCaseInsensitive(property.Key);
 
                 if (hasKey)
                 {
