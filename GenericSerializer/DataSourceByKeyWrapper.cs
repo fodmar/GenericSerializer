@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using GenericSerializer;
 
-public class DataSourceByKeyWraper : IDataSourceByKey
+public class DataSourceByKeyWrapper : IDataSourceByKey
 {
     private readonly IDataSourceByKey dataSourceByKey;
     private readonly Dictionary<string, (bool, object)> cache;
 
-    public DataSourceByKeyWraper(IDataSourceByKey dataSourceByKey)
+    public DataSourceByKeyWrapper(IDataSourceByKey dataSourceByKey)
     {
         this.dataSourceByKey = dataSourceByKey;
         this.cache = new Dictionary<string, (bool, object)>();

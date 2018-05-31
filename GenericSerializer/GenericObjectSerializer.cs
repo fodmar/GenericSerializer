@@ -17,7 +17,7 @@ namespace GenericSerializer
         public T Deserialize<T>(IDataSourceByKey dataSourceByKey)
         {
             Type type = typeof(T);
-            DataSourceByKeyWraper dataSourceByKeyWrapper = new DataSourceByKeyWraper(dataSourceByKey);
+            DataSourceByKeyWrapper dataSourceByKeyWrapper = new DataSourceByKeyWrapper(dataSourceByKey);
 
             (ConstructorInfo pickedConstructor, object[] parameters) = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, dataSourceByKeyWrapper);
 

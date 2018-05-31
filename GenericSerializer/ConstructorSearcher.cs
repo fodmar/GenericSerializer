@@ -44,6 +44,11 @@ namespace GenericSerializer
                     parameterValues[i] = dataSourceValue;
                     continue;
                 }
+                else if (parameterInfo.HasDefaultValue)
+                {
+                    parameterValues[i] = parameterInfo.DefaultValue;
+                    continue;
+                }
 
                 // parameter doesnt exists in datasource, so return null
                 return null;
