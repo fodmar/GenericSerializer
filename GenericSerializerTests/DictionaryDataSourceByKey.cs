@@ -20,7 +20,7 @@ namespace GenericSerializerTests
         {
             if (!this.visitedKeys.Add(key))
             {
-                throw new Exception($"Key {key} is visited more than one");
+                throw new Exception($"Key {key} is visited more than once");
             }
 
             object obj;

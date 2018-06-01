@@ -19,9 +19,9 @@ namespace GenericSerializer
             Type type = typeof(T);
             DataSourceByKeyWrapper dataSourceByKeyWrapper = new DataSourceByKeyWrapper(dataSourceByKey);
 
-            (ConstructorInfo pickedConstructor, object[] parameters) = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, dataSourceByKeyWrapper);
+            ConstructorInfoWrapper pickedConstructor = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, dataSourceByKeyWrapper);
 
-            T obj = (T)pickedConstructor.Invoke(parameters);
+            T obj = pickedConstructor.Invoke<T>();
 
             IDictionary<string, PropertyInfo> properties = type.GetSetters();
 

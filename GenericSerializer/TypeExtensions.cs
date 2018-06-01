@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace GenericSerializer
 {
-    public static class TypeExtensions
+    static class TypeExtensions
     {
         public static IDictionary<string, PropertyInfo> GetSetters(this Type type)
         {
@@ -15,11 +15,12 @@ namespace GenericSerializer
                 .ToDictionary(p => p.Name);
         }
 
-        public static IOrderedEnumerable<ConstructorInfo> GetConstructorsByParameterCount(this Type type)
+        public static IOrderedEnumerable<ConstructorInfoWrapper> GetConstructorsByParameterCount(this Type type)
         {
             return type
                 .GetConstructors()
-                .OrderByDescending(c => c.GetParameters().Length);
+                .Select(c => new ConstructorInfoWrapper(c))
+                .OrderByDescending(c => c.ParameterCount);
         }
     }
 }
