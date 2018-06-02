@@ -11,5 +11,15 @@ namespace GenericSerializerTests
         {
             Assert.Equal(expected, current);
         }
+
+        public static void ShouldNotBeNull<T>(this T current) where T : class
+        {
+            Assert.NotNull(current);
+        }
+
+        public static void ShouldBeNull<T>(this T current) where T : class
+        {
+            Assert.Null(current);
+        }
     }
 }

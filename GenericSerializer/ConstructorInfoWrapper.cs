@@ -18,9 +18,9 @@ namespace GenericSerializer
 
         public int ParameterCount => Parameters.Length;
 
-        public T Invoke<T>()
+        public object Invoke()
         {
-            return (T)Constructor.Invoke(ParametersValues);
+            return Constructor.Invoke(ParametersValues);
         }
 
         public bool TryMatchAndSetParameterValues(IDataSourceByKey dataSourceByKey)

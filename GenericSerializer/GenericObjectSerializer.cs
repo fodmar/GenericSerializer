@@ -16,22 +16,39 @@ namespace GenericSerializer
 
         public T Deserialize<T>(IDataSourceByKey dataSourceByKey)
         {
-            Type type = typeof(T);
-            DataSourceByKeyWrapper dataSourceByKeyWrapper = new DataSourceByKeyWrapper(dataSourceByKey);
+            return (T)this.Deserialize(typeof(T), dataSourceByKey, string.Empty);
+        }
+
+        private object Deserialize(Type type, IDataSourceByKey dataSourceByKey, string path)
+        {
+            DataSourceByKeyWrapper dataSourceByKeyWrapper = new DataSourceByKeyWrapper(dataSourceByKey, path);
 
             ConstructorInfoWrapper pickedConstructor = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, dataSourceByKeyWrapper);
 
-            T obj = pickedConstructor.Invoke<T>();
+            object obj = pickedConstructor.Invoke();
 
             IDictionary<string, PropertyInfo> properties = type.GetSetters();
 
-            foreach (KeyValuePair<string, PropertyInfo> property in properties)
+            foreach (KeyValuePair<string, PropertyInfo> pair in properties)
             {
-                (bool hasKey, object value) = dataSourceByKeyWrapper.TryGetValueCaseInsensitive(property.Key);
+                PropertyInfo property = pair.Value;
 
-                if (hasKey)
+                if (property.PropertyType.IsClass && property.PropertyType != typeof(string)) // how to handle this?
                 {
-                    property.Value.SetValue(obj, value); 
+                    string propertyName = $"{path}.{property.Name}";
+
+                    object nestedObj = this.Deserialize(property.PropertyType, dataSourceByKey, propertyName);
+
+                    property.SetValue(obj, nestedObj);
+                }
+                else
+                {
+                    (bool hasKey, object value) = dataSourceByKeyWrapper.TryGetValueCaseInsensitive(pair.Key);
+                    
+                    if (hasKey)
+                    {
+                        property.SetValue(obj, value); 
+                    }
                 }
             }
 
