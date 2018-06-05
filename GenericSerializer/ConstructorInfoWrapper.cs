@@ -31,7 +31,7 @@ namespace GenericSerializer
             {
                 ParameterInfo parameterInfo = Parameters[i];
 
-                (bool exisits, object dataSourceValue) = dataSourceByKey.TryGetValueCaseInsensitive(parameterInfo.Name);
+                (bool exisits, object dataSourceValue) = dataSourceByKey.TryGetValue(parameterInfo.Name);
 
                 if (exisits)
                 {

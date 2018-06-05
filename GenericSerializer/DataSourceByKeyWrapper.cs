@@ -21,7 +21,7 @@ public class DataSourceByKeyWrapper : IDataSourceByKey
         }
     }
 
-    public (bool, object) TryGetValueCaseInsensitive(string key)
+    public (bool, object) TryGetValue(string key)
     {
         if (this.applyPath)
         {
@@ -33,7 +33,7 @@ public class DataSourceByKeyWrapper : IDataSourceByKey
             return value;
         }
 
-        (bool, object) val = this.dataSourceByKey.TryGetValueCaseInsensitive(key);
+        (bool, object) val = this.dataSourceByKey.TryGetValue(key);
         this.cache.Add(key, val);
         return val;
     }

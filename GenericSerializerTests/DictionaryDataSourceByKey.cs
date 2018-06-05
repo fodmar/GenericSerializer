@@ -12,11 +12,11 @@ namespace GenericSerializerTests
 
         public DictionaryDataSourceByKey(Dictionary<string, object> dict)
         {
-            this.dict = new Dictionary<string, object>(dict, StringComparer.OrdinalIgnoreCase);
+            this.dict = dict;
             this.visitedKeys = new HashSet<string>();
         }
 
-        public (bool, object) TryGetValueCaseInsensitive(string key)
+        public (bool, object) TryGetValue(string key)
         {
             if (!this.visitedKeys.Add(key))
             {

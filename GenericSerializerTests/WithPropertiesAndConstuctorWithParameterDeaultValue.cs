@@ -7,17 +7,17 @@ namespace GenericSerializerTests
 {
     public class WithPropertiesAndConstuctorWithParameterDeaultValue : TestBase<WithPropertiesAndConstuctorWithParameterDeaultValue.Object>
     {
-        private const string Prop0 = "abc";
-        private const bool Prop1 = true;
+        private const string param0 = "abc";
+        private const bool param1 = true;
         private const int Prop2 = 1234;
 
         public class Object
         {
-            public Object(string prop0, bool prop1 = false, int prop2 = 1234)
+            public Object(string param0, bool param1 = false, int param2 = 1234)
             {
-                Prop0 = prop0;
-                Prop1 = prop1;
-                Prop2 = prop2;
+                Prop0 = param0;
+                Prop1 = param1;
+                Prop2 = param2;
             }
 
             public string Prop0 { get; }
@@ -32,15 +32,15 @@ namespace GenericSerializerTests
         {
             return new Dictionary<string, object>
             {
-                { nameof(Object.Prop0), Prop0 },
-                { nameof(Object.Prop1), Prop1 },
+                { nameof(param0), param0 },
+                { nameof(param1), param1 },
             };
         }
 
         protected override void Assert(Object obj)
         {
-            obj.Prop0.ShouldEqual(Prop0);
-            obj.Prop1.ShouldEqual(Prop1);
+            obj.Prop0.ShouldEqual(param0);
+            obj.Prop1.ShouldEqual(param1);
             obj.Prop2.ShouldEqual(Prop2);
         }
     }

@@ -43,7 +43,7 @@ namespace GenericSerializer
                 }
                 else
                 {
-                    (bool hasKey, object value) = dataSourceByKeyWrapper.TryGetValueCaseInsensitive(pair.Key);
+                    (bool hasKey, object value) = dataSourceByKeyWrapper.TryGetValue(pair.Key);
                     
                     if (hasKey)
                     {

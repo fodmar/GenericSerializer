@@ -7,21 +7,22 @@ namespace GenericSerializerTests
 {
     public class ReadKeyOnlyOnceFromDataSource : TestBase<ReadKeyOnlyOnceFromDataSource.Object>
     {
-        private const string Prop0 = "abc";
+        private const string param0 = "abc";
 
         public class Object
         {
             public string Prop0 { get; set; }
 
-            public Object(string prop0)
+            public Object(string param0)
+            {
+                Prop0 = param0;
+            }
+
+            public Object(string param0, string param1)
             {
             }
 
-            public Object(string prop0, string prop1)
-            {
-            }
-
-            public Object(string prop0, string prop1, string prop2)
+            public Object(string param0, string param1, string param2)
             {
             }
         }
@@ -33,13 +34,13 @@ namespace GenericSerializerTests
         {
             return new Dictionary<string, object>
             {
-                { nameof(Object.Prop0), Prop0 }
+                { nameof(param0), param0 }
             };
         }
 
         protected override void Assert(Object obj)
         {
-            obj.Prop0.ShouldEqual(Prop0);
+            obj.Prop0.ShouldEqual(param0);
         }
     }
 }
