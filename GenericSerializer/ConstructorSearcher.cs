@@ -7,13 +7,13 @@ namespace GenericSerializer
 {
     class ConstructorSearcher
     {
-        public ConstructorInfoWrapper GetConstructorWithMostParametersThatCanSatisfy(Type type, IDataSourceByKey dataSourceByKey)
+        public ConstructorInfoWrapper GetConstructorWithMostParametersThatCanSatisfy(Type type, IDictionary<string, object> propertyValues)
         {
             IOrderedEnumerable<ConstructorInfoWrapper> constructors = type.GetConstructorsByParameterCount();
 
             foreach (ConstructorInfoWrapper constructor in constructors)
             {
-                if (constructor.TryMatchAndSetParameterValues(dataSourceByKey))
+                if (constructor.TryMatchAndSetParameterValues(propertyValues))
                 {
                     return constructor;
                 }

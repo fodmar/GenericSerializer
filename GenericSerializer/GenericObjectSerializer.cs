@@ -14,16 +14,14 @@ namespace GenericSerializer
             this.constructorSearcher = new ConstructorSearcher();
         }
 
-        public T Deserialize<T>(IDataSourceByKey dataSourceByKey)
+        public T Deserialize<T>(IDictionary<string, object> propertyValues)
         {
-            return (T)this.Deserialize(typeof(T), dataSourceByKey, string.Empty);
+            return (T)this.Deserialize(typeof(T), propertyValues, string.Empty);
         }
 
-        private object Deserialize(Type type, IDataSourceByKey dataSourceByKey, string path)
+        private object Deserialize(Type type, IDictionary<string, object> propertyValues, string path)
         {
-            DataSourceByKeyWrapper dataSourceByKeyWrapper = new DataSourceByKeyWrapper(dataSourceByKey, path);
-
-            ConstructorInfoWrapper pickedConstructor = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, dataSourceByKeyWrapper);
+            ConstructorInfoWrapper pickedConstructor = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, propertyValues);
 
             object obj = pickedConstructor.Invoke();
 
@@ -32,18 +30,17 @@ namespace GenericSerializer
             foreach (KeyValuePair<string, PropertyInfo> pair in properties)
             {
                 PropertyInfo property = pair.Value;
+                string propertyPath = property.Name.FormatPath(path);
 
                 if (property.PropertyType.IsClass && property.PropertyType != typeof(string)) // how to handle this?
                 {
-                    string propertyName = $"{path}.{property.Name}";
-
-                    object nestedObj = this.Deserialize(property.PropertyType, dataSourceByKey, propertyName);
+                    object nestedObj = this.Deserialize(property.PropertyType, propertyValues, propertyPath);
 
                     property.SetValue(obj, nestedObj);
                 }
                 else
                 {
-                    (bool hasKey, object value) = dataSourceByKeyWrapper.TryGetValue(pair.Key);
+                    (bool hasKey, object value) = propertyValues.TryGetValue(propertyPath);
                     
                     if (hasKey)
                     {
@@ -55,7 +52,7 @@ namespace GenericSerializer
             return obj;
         }
 
-        public IDataSourceByKey Serialize<T>(T obj)
+        public IDictionary<string, object> Serialize<T>(T obj)
         {
             throw new NotImplementedException();
         }

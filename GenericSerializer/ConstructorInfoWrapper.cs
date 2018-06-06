@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace GenericSerializer
@@ -23,7 +24,7 @@ namespace GenericSerializer
             return Constructor.Invoke(ParametersValues);
         }
 
-        public bool TryMatchAndSetParameterValues(IDataSourceByKey dataSourceByKey)
+        public bool TryMatchAndSetParameterValues(IDictionary<string, object> propertyValues)
         {
             object[] parameterValues = new object[ParameterCount];
 
@@ -31,7 +32,7 @@ namespace GenericSerializer
             {
                 ParameterInfo parameterInfo = Parameters[i];
 
-                (bool exisits, object dataSourceValue) = dataSourceByKey.TryGetValue(parameterInfo.Name);
+                (bool exisits, object dataSourceValue) = propertyValues.TryGetValue(parameterInfo.Name);
 
                 if (exisits)
                 {

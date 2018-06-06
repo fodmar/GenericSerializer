@@ -1,8 +1,10 @@
-﻿namespace GenericSerializer
+﻿using System.Collections.Generic;
+
+namespace GenericSerializer
 {
     public interface IGenericObjectSerializer
     {
-        IDataSourceByKey Serialize<T>(T obj);
-        T Deserialize<T>(IDataSourceByKey dataSourceByKey);
+        IDictionary<string, object> Serialize<T>(T obj);
+        T Deserialize<T>(IDictionary<string, object> propertyValues);
     }
 }

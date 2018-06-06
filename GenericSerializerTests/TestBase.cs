@@ -12,11 +12,9 @@ namespace GenericSerializerTests
         {
             Dictionary<string, object> dict = PrepareData();
 
-            IDataSourceByKey dataSourceByKey = new DictionaryDataSourceByKey(dict);
-
             GenericObjectSerializer serializer = new GenericObjectSerializer();
 
-            T obj = serializer.Deserialize<T>(dataSourceByKey);
+            T obj = serializer.Deserialize<T>(dict);
 
             Assert(obj);
         }
