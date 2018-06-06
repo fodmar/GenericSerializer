@@ -7,13 +7,6 @@ namespace GenericSerializer
 {
     public class GenericObjectSerializer : IGenericObjectSerializer
     {
-        private ConstructorSearcher constructorSearcher;
-
-        public GenericObjectSerializer()
-        {
-            this.constructorSearcher = new ConstructorSearcher();
-        }
-
         public T Deserialize<T>(IDictionary<string, object> propertyValues)
         {
             return (T)this.Deserialize(typeof(T), propertyValues, string.Empty);
@@ -21,22 +14,22 @@ namespace GenericSerializer
 
         private object Deserialize(Type type, IDictionary<string, object> propertyValues, string path)
         {
-            ConstructorInfoWrapper pickedConstructor = constructorSearcher.GetConstructorWithMostParametersThatCanSatisfy(type, propertyValues);
+            ConstructorInfoWrapper pickedConstructor = type.GetConstructorWithMostParametersThatCanSatisfy(propertyValues);
 
             object obj = pickedConstructor.Invoke();
 
-            IDictionary<string, PropertyInfo> properties = type.GetSetters();
+            IEnumerable<PropertyInfo> setters = type.GetSetters();
 
-            foreach (KeyValuePair<string, PropertyInfo> pair in properties)
+            foreach (PropertyInfo setter in setters)
             {
-                PropertyInfo property = pair.Value;
-                string propertyPath = property.Name.FormatPath(path);
+                Type setterType = setter.PropertyType;
+                string propertyPath = setter.Name.FormatPath(path);
 
-                if (property.PropertyType.IsClass && property.PropertyType != typeof(string)) // how to handle this?
+                if (setterType.IsClass && setterType != typeof(string)) // how to handle this?
                 {
-                    object nestedObj = this.Deserialize(property.PropertyType, propertyValues, propertyPath);
+                    object nestedObj = this.Deserialize(setterType, propertyValues, propertyPath);
 
-                    property.SetValue(obj, nestedObj);
+                    setter.SetValue(obj, nestedObj);
                 }
                 else
                 {
@@ -44,7 +37,7 @@ namespace GenericSerializer
                     
                     if (hasKey)
                     {
-                        property.SetValue(obj, value); 
+                        setter.SetValue(obj, value); 
                     }
                 }
             }
