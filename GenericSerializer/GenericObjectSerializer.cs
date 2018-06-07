@@ -27,9 +27,12 @@ namespace GenericSerializer
 
                 if (setterType.IsClass && setterType != typeof(string)) // how to handle this?
                 {
-                    object nestedObj = this.Deserialize(setterType, propertyValues, propertyPath);
+                    if (propertyValues.HasAnyKeyThatStartsWith(propertyPath))
+                    {
+                        object nestedObj = this.Deserialize(setterType, propertyValues, propertyPath);
 
-                    setter.SetValue(obj, nestedObj);
+                        setter.SetValue(obj, nestedObj);
+                    }
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GenericSerializer
 {
@@ -9,6 +10,11 @@ namespace GenericSerializer
             TValue value;
             bool hasValue = dict.TryGetValue(key, out value);
             return (hasValue, value);
+        }
+
+        public static bool HasAnyKeyThatStartsWith<TValue>(this IDictionary<string, TValue> dict, string value)
+        {
+            return dict.Keys.Any(k => k.StartsWith(value));
         }
     }
 }
