@@ -7,8 +7,7 @@ namespace GenericSerializer
     {
         public static (bool, TValue) TryGetValue<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
         {
-            TValue value;
-            bool hasValue = dict.TryGetValue(key, out value);
+            bool hasValue = dict.TryGetValue(key, out TValue value);
             return (hasValue, value);
         }
 

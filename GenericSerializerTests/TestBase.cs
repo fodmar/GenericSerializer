@@ -1,22 +1,18 @@
 ﻿using GenericSerializer;
+using System;
 using System.Collections.Generic;
 
 namespace GenericSerializerTests
 {
-    public abstract class TestBase<T>
+    public abstract class TestBase
     {
-        protected abstract Dictionary<string, object> PrepareData();
-        protected abstract void Assert(T obj);
-
-        protected void Test()
+        protected void Test<T>(Dictionary<string, object> dict, Action<T> assert)
         {
-            Dictionary<string, object> dict = PrepareData();
-
             GenericObjectSerializer serializer = new GenericObjectSerializer();
 
             T obj = serializer.Deserialize<T>(dict);
 
-            Assert(obj);
+            assert(obj);
         }
     }
 }

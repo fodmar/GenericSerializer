@@ -5,7 +5,7 @@ using Xunit;
 
 namespace GenericSerializerTests
 {
-    public class WithPropertiesAndConstructor : TestBase<WithPropertiesAndConstructor.Object>
+    public class WithPropertiesAndConstructor : TestBase
     {
         private const string param0 = "abc";
         private const bool param1 = true;
@@ -25,19 +25,16 @@ namespace GenericSerializerTests
         }
 
         [Fact(DisplayName = "Object with properties and constructor")]
-        public void TestWithPropertiesAndConstructor() => this.Test();
+        public void TestWithPropertiesAndConstructor() => this.Test<Object>(PrepareData, Assert);
 
-        protected override Dictionary<string, object> PrepareData()
+        private Dictionary<string, object> PrepareData => new Dictionary<string, object>
         {
-            return new Dictionary<string, object>
-            {
-                { nameof(param0), param0 },
-                { nameof(param1), param1 },
-                { nameof(Object.Prop2), Prop2 },
-            };
-        }
+            { nameof(param0), param0 },
+            { nameof(param1), param1 },
+            { nameof(Object.Prop2), Prop2 },
+        };
 
-        protected override void Assert(Object obj)
+        private void Assert(Object obj)
         {
             obj.Prop0.ShouldEqual(param0);
             obj.Prop1.ShouldEqual(param1);

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace GenericSerializerTests
 {
-    public class WithClassProperty : TestBase<WithClassProperty.Object>
+    public class WithClassProperty : TestBase
     {
         private const string Prop0 = "abc";
         private const bool Prop1 = true;
@@ -25,22 +25,19 @@ namespace GenericSerializerTests
         }
 
         [Fact(DisplayName = "Object with class property")]
-        public void TestWithClassProperty() => this.Test();
+        public void TestWithClassProperty() => this.Test<Object>(PrepareData, Assert);
 
-        protected override Dictionary<string, object> PrepareData()
+        private Dictionary<string, object> PrepareData => new Dictionary<string, object>
         {
-            return new Dictionary<string, object>
-            {
-                { nameof(Object.Prop0), Prop0 },
-                { nameof(Object.Prop1), Prop1 },
-                { nameof(Object.Prop2), Prop2 },
-                { $"{nameof(Object.Nested)}.{nameof(Object.Prop0)}", NestedProp0 },
-                { $"{nameof(Object.Nested)}.{nameof(Object.Prop1)}", NestedProp1 },
-                { $"{nameof(Object.Nested)}.{nameof(Object.Prop2)}", NestedProp2 },
-            };
-        }
+            { nameof(Object.Prop0), Prop0 },
+            { nameof(Object.Prop1), Prop1 },
+            { nameof(Object.Prop2), Prop2 },
+            { $"{nameof(Object.Nested)}.{nameof(Object.Prop0)}", NestedProp0 },
+            { $"{nameof(Object.Nested)}.{nameof(Object.Prop1)}", NestedProp1 },
+            { $"{nameof(Object.Nested)}.{nameof(Object.Prop2)}", NestedProp2 },
+        };
 
-        protected override void Assert(Object obj)
+        private void Assert(Object obj)
         {
             obj.Prop0.ShouldEqual(Prop0);
             obj.Prop1.ShouldEqual(Prop1);

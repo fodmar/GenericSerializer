@@ -5,7 +5,7 @@ using Xunit;
 
 namespace GenericSerializerTests
 {
-    public class WithPropertiesAndStatic : TestBase<WithPropertiesAndStatic.Object>
+    public class WithPropertiesAndStatic : TestBase
     {
         private const string Prop0 = "abc";
         private const bool Prop1 = true;
@@ -20,19 +20,16 @@ namespace GenericSerializerTests
         }
 
         [Fact(DisplayName = "Object with properties and static")]
-        public void TestWithPropertiesAndGetter() => this.Test();
+        public void TestWithPropertiesAndGetter() => this.Test<Object>(PrepareData, Assert);
 
-        protected override Dictionary<string, object> PrepareData()
+        private Dictionary<string, object> PrepareData => new Dictionary<string, object>
         {
-            return new Dictionary<string, object>
-            {
-                { nameof(Object.Prop0), Prop0 },
-                { nameof(Object.Prop1), Prop1 },
-                { nameof(Object.Prop2), Prop2 },
-            };
-        }
+            { nameof(Object.Prop0), Prop0 },
+            { nameof(Object.Prop1), Prop1 },
+            { nameof(Object.Prop2), Prop2 },
+        };
 
-        protected override void Assert(Object obj)
+        private void Assert(Object obj)
         {
             obj.Prop0.ShouldEqual(Prop0);
             obj.Prop1.ShouldEqual(Prop1);
