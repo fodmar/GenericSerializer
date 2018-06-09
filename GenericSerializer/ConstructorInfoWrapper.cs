@@ -24,15 +24,34 @@ namespace GenericSerializer
             return Constructor.Invoke(ParametersValues);
         }
 
-        public bool TryMatchAndSetParameterValues(IDictionary<string, object> propertyValues)
+        public bool TryMatchAndSetParameterValues(GenericObjectSerializer genericSerializer, IDictionary<string, object> propertyValues, string path)
         {
             object[] parameterValues = new object[ParameterCount];
 
             for (int i = 0; i < ParameterCount; i++)
             {
                 ParameterInfo parameterInfo = Parameters[i];
+                string parameterName = parameterInfo.Name.FormatPath(path);
 
-                (bool exisits, object dataSourceValue) = propertyValues.TryGetValue(parameterInfo.Name);
+                if (parameterInfo.ParameterType.IsClass && parameterInfo.ParameterType != typeof(string))
+                {
+                    parameterValues[i] = genericSerializer.Deserialize(parameterInfo.ParameterType, propertyValues, parameterName);
+
+                    if (parameterValues[i] == null)
+                    {
+                        if (parameterInfo.HasDefaultValue)
+                        {
+                            parameterValues[i] = parameterInfo.DefaultValue;
+                            continue;
+                        }
+
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                (bool exisits, object dataSourceValue) = propertyValues.TryGetValue(parameterName);
 
                 if (exisits)
                 {

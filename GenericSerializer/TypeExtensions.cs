@@ -22,11 +22,11 @@ namespace GenericSerializer
                 .OrderByDescending(c => c.ParameterCount);
         }
 
-        public static ConstructorInfoWrapper GetConstructorWithMostParametersThatCanSatisfy(this Type type, IDictionary<string, object> propertyValues)
+        public static ConstructorInfoWrapper GetConstructorWithMostParametersThatCanSatisfy(this Type type, GenericObjectSerializer genericSerializer, IDictionary<string, object> propertyValues, string path)
         {
             return type
                 .GetConstructorsByParameterCount()
-                .FirstOrDefault(c => c.TryMatchAndSetParameterValues(propertyValues));
+                .FirstOrDefault(c => c.TryMatchAndSetParameterValues(genericSerializer, propertyValues, path));
         }
     }
 }

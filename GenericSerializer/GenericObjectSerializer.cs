@@ -12,9 +12,14 @@ namespace GenericSerializer
             return (T)this.Deserialize(typeof(T), propertyValues, string.Empty);
         }
 
-        private object Deserialize(Type type, IDictionary<string, object> propertyValues, string path)
+        public object Deserialize(Type type, IDictionary<string, object> propertyValues, string path)
         {
-            ConstructorInfoWrapper pickedConstructor = type.GetConstructorWithMostParametersThatCanSatisfy(propertyValues);
+            ConstructorInfoWrapper pickedConstructor = type.GetConstructorWithMostParametersThatCanSatisfy(this, propertyValues, path);
+
+            if (pickedConstructor == null)
+            {
+                return null;
+            }
 
             object obj = pickedConstructor.Invoke();
 
