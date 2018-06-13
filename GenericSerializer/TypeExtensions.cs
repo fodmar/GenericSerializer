@@ -28,5 +28,10 @@ namespace GenericSerializer
                 .GetConstructorsByParameterCount()
                 .FirstOrDefault(c => c.TryMatchAndSetParameterValues(genericSerializer, propertyValues, path));
         }
+
+        public static bool IsUserClass(this Type type)
+        {
+            return type.IsClass && type != typeof(string); // how to handle this?
+        }
     }
 }

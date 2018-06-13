@@ -33,7 +33,7 @@ namespace GenericSerializer
                 ParameterInfo parameterInfo = Parameters[i];
                 string parameterName = parameterInfo.Name.FormatPath(path);
 
-                if (parameterInfo.ParameterType.IsClass && parameterInfo.ParameterType != typeof(string))
+                if (parameterInfo.ParameterType.IsUserClass())
                 {
                     parameterValues[i] = genericSerializer.Deserialize(parameterInfo.ParameterType, propertyValues, parameterName);
 
@@ -42,35 +42,34 @@ namespace GenericSerializer
                         if (parameterInfo.HasDefaultValue)
                         {
                             parameterValues[i] = parameterInfo.DefaultValue;
-                            continue;
                         }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    (bool exisits, object dataSourceValue) = propertyValues.TryGetValue(parameterName);
 
+                    if (exisits)
+                    {
+                        parameterValues[i] = dataSourceValue;
+                    }
+                    else if (parameterInfo.HasDefaultValue)
+                    {
+                        parameterValues[i] = parameterInfo.DefaultValue;
+                    }
+                    else
+                    {
                         return false;
                     }
-
-                    continue;
                 }
-
-                (bool exisits, object dataSourceValue) = propertyValues.TryGetValue(parameterName);
-
-                if (exisits)
-                {
-                    parameterValues[i] = dataSourceValue;
-                    continue;
-                }
-                else if (parameterInfo.HasDefaultValue)
-                {
-                    parameterValues[i] = parameterInfo.DefaultValue;
-                    continue;
-                }
-
-                // parameter doesnt exists in datasource, so return false
-                return false;
             }
 
             ParametersValues = parameterValues;
             return true;
-
         }
     }
 }
